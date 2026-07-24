@@ -6,7 +6,9 @@ How rows get into `data/events.jsonl`, how their confidence tier is chosen, and 
 
 An event belongs here if it plausibly changed what a search or AI answer surface returns to a general audience, and if it can be pinned to a date.
 
-Surfaces in scope: the classic Google SERP, Google AI Overviews, Google AI Mode, ChatGPT, Perplexity, the Gemini app, Bing, and Claude. Events in scope: model releases, search feature changes, confirmed core updates, confirmed spam updates, other ranking system changes, policy changes affecting what a surface will answer, and observed volatility spikes.
+Surfaces in scope: the classic Google SERP, Google AI Overviews, Google AI Mode, Google Discover, ChatGPT, Perplexity, the Gemini app, Bing, and Claude. Events in scope: model releases, search feature changes, confirmed core updates, confirmed spam updates, other ranking system changes, policy changes affecting what a surface will answer, and observed volatility spikes.
+
+Google Discover is in scope because Google confirms Discover updates on the same status dashboard it uses for Search updates, at the same evidentiary standard. Discover rows carry `surface` of `google_discover` and must not be pooled with web Search rows, which is stated on the row rather than left to the reader.
 
 ## Inclusion criteria
 
@@ -60,6 +62,8 @@ A `sensor_spike` row records observed volatility and nothing else. It never name
 Spike rows are proposed by an automated capture process that runs outside this repository and opens a pull request. They are never committed automatically. A human reviews each proposal and either admits it, merges it into an existing row, or rejects it.
 
 When a cause is later established for a spike, the spike row gains a `related_events` pointer to the causal row. The two rows are never merged. Keeping them separate preserves the distinction between what was measured and what is believed to explain it, which is the distinction the registry exists to hold.
+
+Published `sensor_corroboration` entries name their panel with an opaque label such as `panel_a`. The mapping from label to the underlying keyword set, market, and collection method is internal and is not published here. Labels are stable across rows, so a reader can tell that two rows cite the same panel without learning what that panel is. A reading is worth no more than the label's track record, and the label carries no claim about panel size or representativeness.
 
 ## Related events
 

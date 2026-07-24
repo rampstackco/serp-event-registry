@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/rampstackco/serp-event-registry/blob/main/schema/event.schema.json",
+  "$id": "https://raw.githubusercontent.com/rampstackco/serp-event-registry/main/schema/event.schema.json",
   "title": "Answer surface event",
   "description": "One dated, sourced, attribution tagged event affecting a search or AI answer surface. One object per line in data/events.jsonl. The JSONL file is the source of truth for the registry; every other representation derives from it.",
   "type": "object",
@@ -59,6 +59,7 @@
           "google_serp",
           "google_aio",
           "google_ai_mode",
+          "google_discover",
           "chatgpt",
           "perplexity",
           "gemini_app",
@@ -116,7 +117,7 @@
         "properties": {
           "sensor": {
             "type": "string",
-            "description": "Name of the volatility sensor or dataset.",
+            "description": "Opaque, stable label for the volatility panel, such as panel_a. The mapping from label to the underlying keyword set, market, and collection method is internal and is not published in this repository.",
             "minLength": 2
           },
           "date": {

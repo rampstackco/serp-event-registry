@@ -4,7 +4,7 @@
 
 A dated, sourced, confidence tagged public record of events that changed what search and AI answer surfaces return.
 
-Rows cover AI answer surfaces including ChatGPT, Perplexity, the Gemini app, Google AI Overviews and Google AI Mode, as well as the classic Google SERP. The scope is therefore wider than the repository name suggests: SERP in the name marks the lineage of the data, not the boundary of it.
+Rows cover AI answer surfaces including ChatGPT, Perplexity, the Gemini app, Google AI Overviews and Google AI Mode, as well as the classic Google SERP and Google Discover. The scope is therefore wider than the repository name suggests: SERP in the name marks the lineage of the data, not the boundary of it. Discover is in scope on purpose, because Google confirms Discover updates on the same status dashboard as its Search updates, and the surface list follows the events rather than bounding them.
 
 The registry exists because no vendor publishes this table. Google announces Google events, OpenAI announces OpenAI events, and volatility sensors report movement without a cause. Joining those into one timeline, with an explicit statement of how well each date is attested, is the work this repository does.
 
@@ -54,6 +54,8 @@ Retrieved at commit <sha>.
 Open a pull request that adds one line to `data/events.jsonl`, keeping the file sorted by `event_date`. Include at least one primary source URL: a vendor blog post, a status page, or an official changelog. Secondary reporting can support a row but does not carry it on its own.
 
 Proposals without sources are closed. Proposals whose date is softer than the row claims are asked to lower `date_precision` or `attribution` rather than to drop the row.
+
+This repository holds no secrets and no capture code. Contributions are data and documentation pull requests only.
 
 ## Running the validator
 
