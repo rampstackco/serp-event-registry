@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rampstackco/serp-event-registry/blob/main/schema/event.schema.json",
+  "title": "Answer surface event",
+  "description": "One dated, sourced, attribution tagged event affecting a search or AI answer surface. One object per line in data/events.jsonl. The JSONL file is the source of truth for the registry; every other representation derives from it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "event_date",
+    "date_precision",
+    "event_type",
+    "surface",
+    "actor",
+    "title",
+    "description",
+    "attribution",
+    "added",
+    "last_updated"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Unique slug in the form YYYY-MM-DD-short-name. The date portion must equal event_date.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "event_date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO date in UTC. For announced events this is the announcement date, not the date the change finished reaching users.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "date_precision": {
+      "type": "string",
+      "description": "How exact event_date is. day means the date is known to the calendar day. week means the event is known to fall within the week beginning at event_date. estimated means the date is inferred and could be wrong by more than a week.",
+      "enum": ["day", "week", "estimated"]
+    },
+    "event_type": {
+      "type": "string",
+      "description": "What kind of event this is. sensor_spike records observed volatility only and never asserts a cause.",
+      "enum": [
+        "model_release",
+        "search_feature_change",
+        "core_update",
+        "spam_update",
+        "ranking_system_change",
+        "sensor_spike",
+        "policy_change"
+      ]
+    },
+    "surface": {
+      "type": "array",
+      "description": "The answer surfaces the event affects. Use multi only when an event genuinely lands on surfaces beyond those enumerated here.",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "google_serp",
+          "google_aio",
+          "google_ai_mode",
+          "chatgpt",
+          "perplexity",
+          "gemini_app",
+          "bing",
+          "claude",
+          "multi"
+        ]
+      }
+    },
+    "actor": {
+      "type": "string",
+      "description": "Vendor or origin of the event, lowercase. Known values include google, openai, anthropic, perplexity, microsoft, and observed. Use observed for events with no announcing vendor, such as sensor spikes.",
+      "minLength": 2,
+      "maxLength": 40,
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "title": {
+      "type": "string",
+      "description": "One line naming the event. No trailing period.",
+      "minLength": 8,
+      "maxLength": 120
+    },
+    "description": {
+      "type": "string",
+      "description": "Two to four sentences in a factual register. State what happened, what is uncertain about it, and anything a downstream event study needs to know. Do not assert causation.",
+      "minLength": 40
+    },
+    "source_urls": {
+      "type": "array",
+      "description": "Primary sources for the event. Vendor blog posts, status pages, and official changelogs are preferred over secondary reporting. Required with at least one entry for every event_type except sensor_spike.",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      }
+    },
+    "attribution": {
+      "type": "string",
+      "description": "Confidence ladder for the event and its date. vendor_confirmed: the vendor stated both the event and the date on its own property. vendor_announced: the vendor announced the event but the rollout window or the exact date is uncertain. community_inferred: multiple independent observers converge on the event and no vendor statement exists. hypothesis: we suspect the event and say so.",
+      "enum": [
+        "vendor_confirmed",
+        "vendor_announced",
+        "community_inferred",
+        "hypothesis"
+      ]
+    },
+    "sensor_corroboration": {
+      "type": "array",
+      "description": "Third party volatility readings that coincide with the event. Corroboration is not causation and never upgrades the attribution tier on its own.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sensor", "date", "reading"],
+        "properties": {
+          "sensor": {
+            "type": "string",
+            "description": "Name of the volatility sensor or dataset.",
+            "minLength": 2
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "ISO date of the reading.",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          },
+          "reading": {
+            "type": "string",
+            "description": "The reading as published by the sensor, including its units or scale.",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "related_events": {
+      "type": "array",
+      "description": "event_id values of related rows. A sensor_spike row points at a causal row once a cause is established. The rows are never merged.",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "added": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO date the row entered the registry.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO date the row last changed. Never earlier than added.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    }
+  },
+  "if": {
+    "properties": {
+      "event_type": { "const": "sensor_spike" }
+    },
+    "required": ["event_type"]
+  },
+  "then": {},
+  "else": {
+    "required": ["source_urls"],
+    "properties": {
+      "source_urls": { "minItems": 1 }
+    }
+  }
+}

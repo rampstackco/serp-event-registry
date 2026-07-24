@@ -1,0 +1,12 @@
+# Normalize all text to LF in the repository and on checkout.
+* text=auto eol=lf
+
+*.json   text eol=lf
+*.jsonl  text eol=lf
+*.md     text eol=lf
+*.py     text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+
+# The registry canon is line oriented. Keep diffs one event per line.
+data/events.jsonl text eol=lf -merge
