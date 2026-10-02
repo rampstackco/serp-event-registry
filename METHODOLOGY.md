@@ -37,6 +37,8 @@ The tier describes the event and its date together. A well known event with a po
 
 > Example: the GPT-5 release. The vendor post confirms the release, but carries no dateline this registry can read, so the 7 August 2025 date rests on contemporaneous reporting and the row is capped at this tier.
 
+For OpenAI events, the dated ChatGPT release notes at help.openai.com (article 6825453) are the dated official post that the `vendor_confirmed` tier requires, and the earlier practice of capping an OpenAI row at `vendor_announced` because openai.com refuses automated fetches is retired for any event those notes carry (recorded 1 October 2026).
+
 **`community_inferred`.** No vendor statement exists and multiple independent observers converge on the event and its approximate date.
 
 **`hypothesis`.** We suspect the event happened and we say so in the description. A hypothesis row is a claim about our own uncertainty, and it stays at this tier until a vendor statement or independent convergence moves it.
