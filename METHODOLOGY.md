@@ -37,6 +37,8 @@ The tier describes the event and its date together. A well known event with a po
 
 > Example: the GPT-5 release. The vendor post confirms the release, but carries no dateline this registry can read, so the 7 August 2025 date rests on contemporaneous reporting and the row is capped at this tier.
 
+For OpenAI events, the dated ChatGPT release notes at help.openai.com (article 6825453) are the dated official post that the `vendor_confirmed` tier requires, and the earlier practice of capping an OpenAI row at `vendor_announced` because openai.com refuses automated fetches is retired for any event those notes carry (recorded 1 October 2026).
+
 **`community_inferred`.** No vendor statement exists and multiple independent observers converge on the event and its approximate date.
 
 **`hypothesis`.** We suspect the event happened and we say so in the description. A hypothesis row is a claim about our own uncertainty, and it stays at this tier until a vendor statement or independent convergence moves it.
@@ -64,6 +66,8 @@ Spike rows are proposed by an automated capture process that runs outside this r
 When a cause is later established for a spike, the spike row gains a `related_events` pointer to the causal row. The two rows are never merged. Keeping them separate preserves the distinction between what was measured and what is believed to explain it, which is the distinction the registry exists to hold.
 
 Published `sensor_corroboration` entries name their panel with an opaque label such as `panel_a`. The mapping from label to the underlying keyword set, market, and collection method is internal and is not published here. Labels are stable across rows, so a reader can tell that two rows cite the same panel without learning what that panel is. A reading is worth no more than the label's track record, and the label carries no claim about panel size or representativeness.
+
+**Confirmed events are not a uniform calibration class** (recorded 1 October 2026, from a readout dated 28 August 2026). The capture process that proposes spike rows was read across the window of the August 2026 spam update, which the Search Status Dashboard dates from 18 August at 09:27 to 21 August at 01:49 US/Pacific. Across twenty panel days its mean reading sat a tenth of a standard deviation below the series mean and no panel exceeded a z score of 0.95, although the same instrument has resolved movement above z of 4 on other days, so the null is not obviously a sensitivity failure. The most likely reading is that the panels sample consumer informational queries, and a spam update concentrates its displacement where spam competes, which those panels do not overlap. The consequence for this registry is that "confirmed Google events" is a mixture the sensor sees non uniformly: core updates and spam updates are both vendor confirmed, but they land on different parts of the results. Confirmed rows therefore cannot be pooled as one ground truth class for setting or testing a spike threshold, and any calibration against them has to be stratified by `event_type` and stated per type.
 
 ## Related events
 
